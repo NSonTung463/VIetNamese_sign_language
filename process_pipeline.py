@@ -221,22 +221,22 @@ def train_csv(landmarks_folder,out_folder,parquet_name):
                 df = pd.concat([df, new_row], ignore_index=True) 
     df.to_csv(out_folder + '/train.csv',index=False)
 if __name__ == '__main__':
-    ## 1. Read video and extract landmark to numpy file
-    # extract_landmark_from_video()
+    # 1. Read video and extract landmark to numpy file
+    extract_landmark_from_video()
     
-    # ##2. Convert numpy file to parquet file
-    # print("\t\t-----CONVERT TO PARQUET FILE-----\t\t")
-    # folder_path = './dataset/landmarks'
-    # save_path = './dataset/train_landmark_files/VSL15.parquet'
-    # convert = Convert_file_to_parquet(folder_path, save_path)
-    # dataframe = convert.convert_to_parquet()
+    ##2. Convert numpy file to parquet file
+    print("\t\t-----CONVERT TO PARQUET FILE-----\t\t")
+    folder_path = './dataset/landmarks'
+    save_path = './dataset/train_landmark_files/VSL15.parquet'
+    convert = Convert_file_to_parquet(folder_path, save_path)
+    dataframe = convert.convert_to_parquet()
     
-    # ##Extra to CSV Train file
-    # print("\t\t\t-----Extract to train.csv-----\t\t\t")
-    # landmarks_folder = './dataset/landmarks'
-    # out_folder = './dataset'
-    # parquet_name = 'VSL15'
-    # train_csv(landmarks_folder,out_folder,parquet_name)
+    ##Extra to CSV Train file
+    print("\t\t\t-----Extract to train.csv-----\t\t\t")
+    landmarks_folder = './dataset/landmarks'
+    out_folder = './dataset'
+    parquet_name = 'VSL9'
+    train_csv(landmarks_folder,out_folder,parquet_name)
     
     # # 3. Load data.npy and labels.npy to preprocess data
     print("\t\t\t-----PreprocessLayer-----\t\t\t")
@@ -248,12 +248,12 @@ if __name__ == '__main__':
     print("\t\t\t-----TENSOR CONVERT-----\t\t\t")
     
     tensor_train = torch.tensor(processed_data, dtype=torch.float32)
-    # tensor_labels = torch.tensor(labels_np, dtype=torch.long)
+    tensor_labels = torch.tensor(labels_np, dtype=torch.long)
     
     # Lưu tensor_data
-    torch.save(tensor_train, path_processed+'tensor_train_15.pt')
+    torch.save(tensor_train, path_processed+'tensor_train_9.pt')
     # Lưu tensor_labels
-    # torch.save(tensor_labels, path_processed+'tensor_labels.pt')
+    torch.save(tensor_labels, path_processed+'tensor_labels_9.pt')
     
     
     print('\n\t\t\t----------=============\t\tFinish\t\t ----------=============\t\t\t')

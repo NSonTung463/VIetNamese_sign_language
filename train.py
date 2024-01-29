@@ -18,7 +18,7 @@ import random
 
 
 from data.ds_1 import *
-from model.model_2 import *
+from model.model_1 import *
 from utils import *
 
 BASEDIR= './'#'../input/asl-fingerspelling-config'
@@ -57,9 +57,9 @@ train_df = pd.read_csv('./dataset/train_folded.csv')
 # Sử dụng LabelEncoder để chuyển đổi cột 'phrase' thành số
 label_encoder = LabelEncoder()
 train_df['label'] = label_encoder.fit_transform(train_df['phrase'])
-tensor_train = torch.load( './data/processed_data/tensor_train_15.pt')
+tensor_train = torch.load( './data/processed_data/tensor_train_9.pt')
 tensor_train = tensor_train[:,:,:1086]
-tensor_labels = torch.load( './data/processed_data/tensor_labels_15.pt')
+tensor_labels = torch.load( './data/processed_data/tensor_labels_9.pt')
 train_dataset = TensorDataset(tensor_train, tensor_labels)
 
 # Set up the dataset and dataloader
@@ -84,11 +84,10 @@ train_dataloader = DataLoader(
 
 
 input_size = 1086  # Số lượng đặc trưng
-hidden_size = 256
-num_layers = 4
-output_size = 15
+hidden_size = 124
+output_size = 9
 
-model = ComplexLSTMClassifier(input_size, hidden_size, num_layers, output_size)
+model = SimpleLSTM(cfg.input_size, cfg.hidden_size, cfg.output_size)
 
 # Count the total number of parameters
 total_params = sum(p.numel() for p in model.parameters())

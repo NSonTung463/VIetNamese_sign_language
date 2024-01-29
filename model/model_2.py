@@ -25,11 +25,11 @@ class ComplexLSTMClassifier(nn.Module):
         return out
 
 
-X = torch.rand((4,124,1086))
+# X = torch.rand((4,124,1086))
 
-input_size = 1086  # Số lượng đặc trưng
-hidden_size = 16
-num_layers = 2
-output_size = 15
-model = ComplexLSTMClassifier(input_size, hidden_size, num_layers, output_size)
-print(model(X))
+# input_size = 1086  # Số lượng đặc trưng
+# hidden_size = 16
+# num_layers = 2
+# output_size = 15
+# model = ComplexLSTMClassifier(input_size, hidden_size, num_layers, output_size)
+# print(model(X))

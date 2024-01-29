@@ -1,46 +1,12 @@
-path,file_id,sequence_id,phrase
-./dataset/train_landmark_files/VSL15.parquet,VSL15,anh_hai-miền_bắc,anh hai
-./dataset/train_landmark_files/VSL15.parquet,VSL15,anh_hai-miền_nam,anh hai
-./dataset/train_landmark_files/VSL15.parquet,VSL15,anh_hai-miền_trung,anh hai
-./dataset/train_landmark_files/VSL15.parquet,VSL15,bao_1,báo
-./dataset/train_landmark_files/VSL15.parquet,VSL15,bao_2,báo
-./dataset/train_landmark_files/VSL15.parquet,VSL15,bao_3,báo
-./dataset/train_landmark_files/VSL15.parquet,VSL15,bít_tết-miền_bắc,bít tết
-./dataset/train_landmark_files/VSL15.parquet,VSL15,bít_tết-miền_nam,bít tết
-./dataset/train_landmark_files/VSL15.parquet,VSL15,bít_tết-miền_trung,bít tết
-./dataset/train_landmark_files/VSL15.parquet,VSL15,cháu_họ-miền_bắc,cháu họ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,cháu_họ-miền_nam,cháu họ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,cháu_họ-miền_trung,cháu họ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,chị_hai-miền_bắc,chị hai
-./dataset/train_landmark_files/VSL15.parquet,VSL15,chị_hai-miền_nam,chị hai
-./dataset/train_landmark_files/VSL15.parquet,VSL15,chị_hai-miền_trung,chị hai
-./dataset/train_landmark_files/VSL15.parquet,VSL15,chị_họ-miền_bắc,chị họ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,chị_họ-miền_nam,chị họ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,chị_họ-miền_trung,chị họ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,cung_điện-miền_bắc,cung điện
-./dataset/train_landmark_files/VSL15.parquet,VSL15,cung_điện-miền_nam,cung điện
-./dataset/train_landmark_files/VSL15.parquet,VSL15,cung_điện-miền_trung,cung điện
-./dataset/train_landmark_files/VSL15.parquet,VSL15,cần_không-miền_bắc,cần không
-./dataset/train_landmark_files/VSL15.parquet,VSL15,cần_không-miền_nam,cần không
-./dataset/train_landmark_files/VSL15.parquet,VSL15,cần_không-miền_trung,cần không
-./dataset/train_landmark_files/VSL15.parquet,VSL15,e thẹn 0,e thẹn
-./dataset/train_landmark_files/VSL15.parquet,VSL15,e thẹn 1,e thẹn
-./dataset/train_landmark_files/VSL15.parquet,VSL15,e thẹn 2,e thẹn
-./dataset/train_landmark_files/VSL15.parquet,VSL15,em_họ-miền_bắc,em họ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,em_họ-miền_nam,em họ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,em_họ-miền_trung,em họ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,em rể 0,em rể
-./dataset/train_landmark_files/VSL15.parquet,VSL15,em rể 1,em rể
-./dataset/train_landmark_files/VSL15.parquet,VSL15,em rể 2,em rể
-./dataset/train_landmark_files/VSL15.parquet,VSL15,em trai 0,em trai
-./dataset/train_landmark_files/VSL15.parquet,VSL15,em trai 1,em trai
-./dataset/train_landmark_files/VSL15.parquet,VSL15,em trai 2,em trai
-./dataset/train_landmark_files/VSL15.parquet,VSL15,đúng_không-miền_bắc,đúng không
-./dataset/train_landmark_files/VSL15.parquet,VSL15,đúng_không-miền_nam,đúng không
-./dataset/train_landmark_files/VSL15.parquet,VSL15,đúng_không-miền_trung,đúng không
-./dataset/train_landmark_files/VSL15.parquet,VSL15,dia_chi-mien_bac,địa chỉ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,dia_chi-mien_nam,địa chỉ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,dia_chi-mien_trung,địa chỉ
-./dataset/train_landmark_files/VSL15.parquet,VSL15,đồng phục 0,đồng phục
-./dataset/train_landmark_files/VSL15.parquet,VSL15,đồng phục 1,đồng phục
-./dataset/train_landmark_files/VSL15.parquet,VSL15,đồng phục 2,đồng phục
+path,sequence_id,phrase
+./dataset/train_landmark_files/VSL9,chào,Chào
+./dataset/train_landmark_files/VSL9,chuc_tet,chúc tết
+./dataset/train_landmark_files/VSL9,cấp cứu,Cứu
+./dataset/train_landmark_files/VSL9,cứu,Cứu
+./dataset/train_landmark_files/VSL9,dừng_lại,dừng lại
+./dataset/train_landmark_files/VSL9,2024-01-26_15-27-54,nguy hiểm
+./dataset/train_landmark_files/VSL9,nguy hiểm,nguy hiểm
+./dataset/train_landmark_files/VSL9,tam_biet,tạm biệt
+./dataset/train_landmark_files/VSL9,tet_am,tết âm
+./dataset/train_landmark_files/VSL9,đoàn tụ,đoàn tụ
+./dataset/train_landmark_files/VSL9,đọc sách,đọc sách

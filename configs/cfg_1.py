@@ -39,6 +39,11 @@ cfg.max_phrase = 31 + 2 #max of train data + SOS + EOS
 
 #model
 
+cfg.input_size = 1086
+cfg.hidden_size = 124
+cfg.output_size = 9
+
+
 cfg.model = "model_1"
 cfg.ce_ignore_index = -100
 cfg.label_smoothing = 0.
@@ -65,7 +70,7 @@ cfg.classifier_class = 15
 
 # OPTIMIZATION & SCHEDULE
 cfg.fold = 0
-cfg.epochs =50
+cfg.epochs =100
 cfg.lr = 5e-4 * 9
 cfg.lr_max = 0.01
 cfg.num_cycles = 0.5
