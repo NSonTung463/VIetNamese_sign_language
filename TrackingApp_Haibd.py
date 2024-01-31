@@ -144,6 +144,11 @@ class TrackingApp(QMainWindow):
         self.import_video_button.clicked.connect(self.import_video)
         self.import_video_button.setFixedSize(200, 50)  # Set fixed size for the button
         button_layout1.addWidget(self.import_video_button)
+        
+        self.stop_camera_button = QPushButton("Stop Webcam", self)
+        self.stop_camera_button.clicked.connect(self.stop_webcam)
+        self.stop_camera_button.setFixedSize(200, 50)  # Set fixed size for the button
+        button_layout1.addWidget(self.stop_camera_button)
 
         self.export_csv_button = QPushButton("Export CSV", self)
         self.export_csv_button.clicked.connect(self.export_csv)
@@ -189,22 +194,45 @@ class TrackingApp(QMainWindow):
         self.predicted = None
 
     def run_webcam(self):
+        if self.camera is not None:
+            self.camera.release()  # Release the camera
         self.camera = cv2.VideoCapture(0)  # Open the default camera
+        self.is_video_finished = False
+        self.res = []
         self.timer.start(30)  # Update frame every 30 milliseconds
-
+        
     def import_video(self):
         file_dialog = QFileDialog()
         video_path, _ = file_dialog.getOpenFileName(self, "Select Video File")
         if video_path:
+            if self.camera is not None:
+                self.camera.release()
             self.camera = cv2.VideoCapture(video_path)
+            self.is_video_finished = False
+            self.res = []
             self.timer.start(30)  # Update frame every 30 milliseconds
+            
+
+    def stop_webcam(self):
+        if self.camera is not None:
+            self.camera.release()  # Release the camera
+            self.camera = None  # Set the camera to None
+            self.video_label.clear()  # Clear the video label
+            self.ret = False
 
     def update_frame(self):
         if self.is_video_finished:
-            return
-        ret, frame = self.camera.read()
+            self.stop_webcam()
+            self.ret = False
+            return self.landmark_dataframe
+        else:   
+            keypoints = None
+            if self.camera is not None:
+                self.ret, frame = self.camera.read()
+            else:
+                self.ret = False
                 
-        if ret == True:
+        if self.ret == True:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             results = self.mp_holistic.process(frame)
             keypoints = self.extract_keypoints(results)
@@ -242,7 +270,7 @@ class TrackingApp(QMainWindow):
             # Assuming you have a QWidget or similar to set the layout on
             self.setLayout(self.layout)
             
-        elif ret == False:
+        elif self.ret == False:
             self.res = np.array(self.res)
             self.res_1 = preprocessLayer(self.res)
             self.res_1 = self.res_1[:,:1086]
