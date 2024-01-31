@@ -57,16 +57,18 @@ LHAND = np.arange(468, 489).tolist()
 RHAND = np.arange(522, 543).tolist()
 
 POINT_LANDMARKS = LIP + LHAND + RHAND + NOSE + REYE + LEYE + LARMS + RARMS
+POINT_LANDMARKS_164 = LHAND + RHAND + LIP
 
 kept_cols = all_cols[POINT_LANDMARKS]
 n_landmarks = len(kept_cols)
 
+print(len(all_cols[POINT_LANDMARKS_164]))
 kept_cols_xyz = np.array(['x_' + c for c in kept_cols] + ['y_' + c for c in kept_cols] + ['z_' + c for c in kept_cols])
 
 TARGET_FOLDER = args.output_dir
 
-file_ids = train['file_id'].unique()
-
+# file_ids = train['file_id'].unique()
+file_ids = ["VSL9"]
 def do_one(file_id):
     os.makedirs(TARGET_FOLDER + f'{file_id}/', exist_ok=True)
     print(os.makedirs(TARGET_FOLDER + f'{file_id}/', exist_ok=True))

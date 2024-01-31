@@ -1,12 +1,12 @@
-path,sequence_id,phrase
-./dataset/train_landmark_files/VSL9,chào,Chào
-./dataset/train_landmark_files/VSL9,chuc_tet,chúc tết
-./dataset/train_landmark_files/VSL9,cấp cứu,Cứu
-./dataset/train_landmark_files/VSL9,cứu,Cứu
-./dataset/train_landmark_files/VSL9,dừng_lại,dừng lại
-./dataset/train_landmark_files/VSL9,2024-01-26_15-27-54,nguy hiểm
-./dataset/train_landmark_files/VSL9,nguy hiểm,nguy hiểm
-./dataset/train_landmark_files/VSL9,tam_biet,tạm biệt
-./dataset/train_landmark_files/VSL9,tet_am,tết âm
-./dataset/train_landmark_files/VSL9,đoàn tụ,đoàn tụ
-./dataset/train_landmark_files/VSL9,đọc sách,đọc sách
+path,file_id,sequence_id,phrase
+./dataset/train_landmark_files/VSL9.parquet,VSL9,chào,Chào
+./dataset/train_landmark_files/VSL9.parquet,VSL9,chuc_tet,chúc tết
+./dataset/train_landmark_files/VSL9.parquet,VSL9,cấp cứu,Cứu
+./dataset/train_landmark_files/VSL9.parquet,VSL9,cứu,Cứu
+./dataset/train_landmark_files/VSL9.parquet,VSL9,dừng_lại,dừng lại
+./dataset/train_landmark_files/VSL9.parquet,VSL9,2024-01-26_15-27-54,nguy hiểm
+./dataset/train_landmark_files/VSL9.parquet,VSL9,nguy hiểm,nguy hiểm
+./dataset/train_landmark_files/VSL9.parquet,VSL9,tam_biet,tạm biệt
+./dataset/train_landmark_files/VSL9.parquet,VSL9,tet_am,tết âm
+./dataset/train_landmark_files/VSL9.parquet,VSL9,đoàn tụ,đoàn tụ
+./dataset/train_landmark_files/VSL9.parquet,VSL9,đọc sách,đọc sách

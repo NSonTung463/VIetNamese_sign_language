@@ -8,9 +8,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 import matplotlib.pyplot as plt 
-
-N_TARGET_FRAMES = 124
-N_COLS0 = 390
 class Preprocessing(nn.Module):
     def __init__(self):
         super(Preprocessing, self).__init__()
@@ -34,22 +31,21 @@ class Preprocessing(nn.Module):
         x = self.normalize(x)
         x = self.fill_nans(x)
         return x
-class PreprocessLayer(nn.Module):
-    def __init__(self, n_target_frame,n_columns):
-        super(PreprocessLayer, self).__init__()
-        self.n_target_frame = n_target_frame
-        self.n_columns = n_columns
-    def forward(self, data, resize=True):
-        # Padding with Zeros
-        N_FRAMES = data.shape[0] 
-        if N_FRAMES < self.n_target_frame:
-            zeros_tensor = torch.zeros(self.n_target_frame - N_FRAMES, self.n_columns, dtype=torch.float32)
-            data = torch.cat((data, zeros_tensor), dim=0)
-        data = data[None]
-        tensor_downsampled = F.interpolate(data.unsqueeze(0), size=(self.n_target_frame, self.n_columns), mode='bilinear', align_corners=False)[0]
-        data = tensor_downsampled.squeeze(axis=0)
-        return data
-# augs
+def interpolate_or_pad(data, max_len=100, mode="start"):
+    diff = max_len - data.shape[0]
+
+    if diff <= 0:  # Crop
+        data = F.interpolate(data.permute(1,2,0),max_len).permute(2,0,1)
+        mask = torch.ones_like(data[:,0,0])
+        return data, mask
+    
+    coef = 0
+    padding = torch.ones((diff, data.shape[1], data.shape[2]))
+    mask = torch.ones_like(data[:,0,0])
+    data = torch.cat([data, padding * coef])
+    mask = torch.cat([mask, padding[:,0,0] * coef])
+    return data, mask
+
 
 def flip(data, flip_array):
     
@@ -92,10 +88,9 @@ class CustomDataset(Dataset):
         symmetry = pd.read_csv(cfg.symmetry_fp).set_index('id')
         flipped_landmarks = symmetry.loc[landmarks]['corresponding_id'].values
         self.flip_array = np.where(landmarks[:,None]==flipped_landmarks[None,:])[1]
-        
-        
+        self.max_len = cfg.max_len
         self.processor = Preprocessing()
-        self.preprocesslayer = PreprocessLayer(N_TARGET_FRAMES, N_COLS0 )
+        # self.preprocesslayer = PreprocessLayer(N_TARGET_FRAMES, N_COLS0 )
         
         #target stuff
         self.flip_aug = cfg.flip_aug
@@ -111,7 +106,6 @@ class CustomDataset(Dataset):
         row  = self.df.iloc[idx]
         file_id, sequence_id,label = row[['file_id','sequence_id','label']]
         data = self.load_one(file_id, sequence_id)
-        seq_len = data.shape[0]
         data = torch.from_numpy(data)
         # print("DATA RAW")
         # draw_data(data)   ## Check
@@ -130,14 +124,15 @@ class CustomDataset(Dataset):
                 data = self.augment(data)
                 # print("After augment")
                 # draw_data_3d(data)   ## Check
-        
         else: 
             data = self.processor(data)
-        data =  self.preprocesslayer(data.reshape(data.shape[0],-1))
+        data, mask = interpolate_or_pad(data, max_len=self.max_len)
+        # data =  self.preprocesslayer(data.reshape(data.shape[0],-1))
         feature_dict = {'input':data,
                         'output': label,
                         }
-        return data , label
+        data = data.reshape(data.shape[0],-1)
+        return data.float() , label
     
     def augment(self,x):
         x_aug = self.aug(image=x.float())['image']

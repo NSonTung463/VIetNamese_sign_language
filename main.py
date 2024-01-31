@@ -262,7 +262,7 @@ def visualise2d_landmarks(parquet_df, title=""):
                 "buttons": [
                     {
                         "args": [None, {"frame": {"duration": 100,
-                                                  "redraw": True},
+                                                    "redraw": True},
                                         "fromcurrent": True,
                                         "transition": {"duration": 0}}],
                         "label": "&#9654;",

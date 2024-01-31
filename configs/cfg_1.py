@@ -34,13 +34,13 @@ cfg.tags = "base"
 cfg.dataset = "ds_1"
 cfg.min_seq_len = 15
 
-cfg.max_len = 384
+cfg.max_len = 124
 cfg.max_phrase = 31 + 2 #max of train data + SOS + EOS
 
 #model
 
-cfg.input_size = 1086
-cfg.hidden_size = 124
+cfg.input_size = 390
+cfg.hidden_size = 1024
 cfg.output_size = 9
 
 
@@ -61,16 +61,21 @@ cfg.means = 0.5
 cfg.stds = 0.5
 cfg.units_encoder = 512
 cfg.nhead = 4
-cfg.dim_feedforward = 256
 cfg.num_layers = 2
 cfg.dropout = 0.2
 cfg.classifier_class = 15
 
-
+#transformer model
+cfg.d_model = 256  
+cfg.n_landmark = 390
+cfg.dim_feedforward = 512
+cfg.num_layers = 2
+cfg.num_heads = 2
+cfg.num_classes = 9
 
 # OPTIMIZATION & SCHEDULE
 cfg.fold = 0
-cfg.epochs =100
+cfg.epochs =200
 cfg.lr = 5e-4 * 9
 cfg.lr_max = 0.01
 cfg.num_cycles = 0.5
@@ -78,8 +83,8 @@ cfg.warmup_status = True
 cfg.optimizer = "AdamW"
 cfg.weight_decay = 0.05
 cfg.clip_grad = 4.
-cfg.nwarmup = 5
-cfg.batch_size = 4
+cfg.nwarmup = 10
+cfg.batch_size = 8
 cfg.batch_size_val = 128
 cfg.mixed_precision = True # True
 cfg.pin_memory = False

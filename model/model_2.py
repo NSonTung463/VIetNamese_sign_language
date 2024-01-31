@@ -1,35 +1,40 @@
 import torch
 import torch.nn as nn
-import torch
-import torch.nn as nn
-
-class ComplexLSTMClassifier(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, output_size, dropout_rate=0.5):
-        super(ComplexLSTMClassifier, self).__init__()
-        self.lstm1 = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, dropout=dropout_rate)
-        self.lstm2 = nn.LSTM(hidden_size, hidden_size, num_layers, batch_first=True, dropout=dropout_rate)
-        self.fc1 = nn.Linear(hidden_size, hidden_size)
-        self.relu = nn.ReLU()
-        self.dropout = nn.Dropout(dropout_rate)
-        self.fc2 = nn.Linear(hidden_size, output_size)
-        self.softmax = nn.Softmax(dim=1)
+import torch.nn.functional as F
+class CustomTransformerEncoder(nn.Module):
+    def __init__(self, n_landmark, d_model, num_layers, num_classes, num_heads, dim_feedforward):
+        super(CustomTransformerEncoder, self).__init__()
+        self.embedding =  nn.Linear(n_landmark, d_model)
+        self.transformer_layer = nn.TransformerEncoderLayer(
+            d_model=d_model, nhead=num_heads,  dim_feedforward=dim_feedforward
+        )
+        self.transformer_encoder = nn.TransformerEncoder(
+            self.transformer_layer, num_layers=num_layers
+        )
+        self.fc = nn.Linear(d_model, num_classes)
 
     def forward(self, x):
-        out, _ = self.lstm1(x)
-        out, _ = self.lstm2(out)
-        out = self.fc1(out[:, -1, :])
-        out = self.relu(out)
-        out = self.dropout(out)
-        out = self.fc2(out)
-        out = self.softmax(out)
-        return out
+        x = self.embedding(x)
+        transformer_output = self.transformer_encoder(x)
+        mean_pooled = transformer_output.mean(dim=1)
+        logits = self.fc(mean_pooled)
+        return logits
 
-
-# X = torch.rand((4,124,1086))
-
-# input_size = 1086  # Số lượng đặc trưng
-# hidden_size = 16
-# num_layers = 2
-# output_size = 15
-# model = ComplexLSTMClassifier(input_size, hidden_size, num_layers, output_size)
-# print(model(X))
+if __name__ == "__main__":
+    from torch.autograd import Variable
+    
+    # Thông số của mô hình {} embed_dim must be divisible by num_heads
+    n_landmark = 390
+    d_model = 256  
+    dim_feedforward = 256
+    num_layers = 2
+    num_heads = 2
+    num_classes = 9
+    
+    # Xây dựng mô hình
+    model = CustomTransformerEncoder(n_landmark, d_model, num_layers, num_classes, num_heads, dim_feedforward)
+    # In thông tin về kiến trúc mô hình
+    total_params = sum(p.numel() for p in model.parameters())
+    print(f"Total parameters: {total_params}")
+    x = torch.rand((4,124,390))
+    print(model(x).shape)

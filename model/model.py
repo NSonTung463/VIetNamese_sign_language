@@ -2,9 +2,6 @@ import torch
 from torch import nn
 import math
 
-INIT_HE_UNIFORM = torch.nn.init.kaiming_uniform_
-INIT_GLOROT_UNIFORM = torch.nn.init.xavier_uniform_
-INIT_ZEROS = torch.nn.init.zeros_
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 INIT_HE_UNIFORM = torch.nn.init.kaiming_uniform_
 INIT_GLOROT_UNIFORM = torch.nn.init.xavier_uniform_
