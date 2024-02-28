@@ -19,6 +19,7 @@ import os
 
 from model.model_1 import SimpleLSTM
 import pandas as pd
+import torch
 
 
 
@@ -53,35 +54,36 @@ def predict(input, threshold=0.2):
         predicted_class_string = "Uncertain"  # or any other label you prefer for uncertain predictions
     return predicted_class_string
 class PreprocessLayer(nn.Module):
-        def __init__(self):
-            super(PreprocessLayer, self).__init__()
+    def __init__(self):
+        super(PreprocessLayer, self).__init__()
 
-        def forward(self, data0, resize=True):
-            N_TARGET_FRAMES = 124
-            N_COLUMNS = 1629
-            # Fill NaN Values With 0
-            data0 = torch.tensor(data0)
-            data = torch.where(torch.isnan(data0), torch.tensor(0.0), data0)
+    def forward(self, data0, resize=True):
+        N_TARGET_FRAMES = 124
+        N_COLUMNS = 1629
+        # Fill NaN Values With 0
+        data0 = torch.tensor(data0)
+        data = torch.where(torch.isnan(data0), torch.tensor(0.0), data0)
 
-            # Add another dimension
+        # Add another dimension
 
-            # # Empty Hand Frame Filtering
-            # hands = data[:, :, :, :84].abs()
-            # mask = hands.sum(dim=2) != 0
-            # data = data[mask].unsqueeze(0)
+        # # Empty Hand Frame Filtering
+        # hands = data[:, :, :, :84].abs()
+        # mask = hands.sum(dim=2) != 0
+        # data = data[mask].unsqueeze(0)
 
-            # Padding with Zeros
-            N_FRAMES = data.shape[0] 
-            if N_FRAMES < N_TARGET_FRAMES:
-                zeros_tensor = torch.zeros(N_TARGET_FRAMES - N_FRAMES, N_COLUMNS, dtype=torch.float32)
-                data = torch.cat((data, zeros_tensor), dim=0)
-            data = data[None]
-            tensor_downsampled = F.interpolate(data.unsqueeze(0), size=(N_TARGET_FRAMES, N_COLUMNS), mode='bilinear', align_corners=False)[0]
-            data = tensor_downsampled.squeeze(axis=0)
-            return data
+        # Padding with Zeros
+        N_FRAMES = data.shape[0] 
+        if N_FRAMES < N_TARGET_FRAMES:
+            zeros_tensor = torch.zeros(N_TARGET_FRAMES - N_FRAMES, N_COLUMNS, dtype=torch.float32)
+            data = torch.cat((data, zeros_tensor), dim=0)
+        data = data[None]
+        tensor_downsampled = F.interpolate(data.unsqueeze(0), size=(N_TARGET_FRAMES, N_COLUMNS), mode='bilinear', align_corners=False)[0]
+        data = tensor_downsampled.squeeze(axis=0)
+        return data
+
 preprocessLayer = PreprocessLayer()
 
-class Convert_file_to_parquet():
+class ConvertFileToParquet():
     def __init__(self, data, folder_path, save_path=None):
         self.folder_path = folder_path
         self.save_path = save_path
@@ -114,10 +116,8 @@ class Convert_file_to_parquet():
         for i in range(self.data.shape[0]):
             frame.append(i)
             data_list.append(self.data[i])
-        data_df = pd.DataFrame(data=data_list, columns=Convert_file_to_parquet.column_name())
+        data_df = pd.DataFrame(data=data_list, columns=ConvertFileToParquet.column_name())
         data_df.insert(0, 'frame', frame)
-        # data_df.index = [file_name]*len(data_df)
-        # data_df.index.name = 'sequence_id'
         return data_df
 
 class TrackingApp(QMainWindow):
@@ -188,7 +188,7 @@ class TrackingApp(QMainWindow):
 
         self.res = []
         self.is_video_finished = False
-        self.threshold = 124
+        self.threshold = 40
         self.num_frame_space = 100
         self.list_frame = []
         self.predicted = None
@@ -240,11 +240,9 @@ class TrackingApp(QMainWindow):
             landmarks_series = pd.Series(keypoints)
             self.landmark_dataframe = self.landmark_dataframe._append(landmarks_series, ignore_index=True)
             
-            # # print(len(self.res))
             nres = len(self.res)
             sequence_arr = np.array(self.res)
             n_frame = sequence_arr.shape[0]
-            # print(f'n_frame: {n_frame}')
             self.landmark_dataframe = self.landmark_dataframe._append({"sequence_id": "sửa sau","frame": n_frame}, ignore_index=True)
             ranges = [(468, 489), (522, 543), (1011, 1032), (1065, 1086)]
             slices_arr = np.concatenate([sequence_arr[n_frame-self.num_frame_space:n_frame, start:end] for start, end in ranges], axis=1)
@@ -254,20 +252,18 @@ class TrackingApp(QMainWindow):
 
             if nres==self.threshold:
                 self.threshold += 1
-                # print(f'nres: {nres}')
-                subarray=sequence_arr[nres-124:nres,:1086]
-                # print(f'sub: {subarray.shape}')
+                subarray=sequence_arr[nres-124:nres,:]
                 subarray = preprocessLayer(subarray)
-                # subarray = subarray[:,:1086]
+                subarray = subarray[:,:1086]
                 self.predicted = predict(subarray)
-            # Display the frame
+                print(self.predicted)
+            
             image = QImage(frame, frame.shape[1], frame.shape[0], QImage.Format_RGB888)
             pixmap = QPixmap.fromImage(image)
             self.video_label.setPixmap(pixmap)
             self.predicted_label = QLabel(str(self.predicted))
             self.layout.addWidget(self.predicted_label, 1, 2)  # Add the label to position (1,2)
 
-            # Assuming you have a QWidget or similar to set the layout on
             self.setLayout(self.layout)
             
         elif self.ret == False:
@@ -282,10 +278,9 @@ class TrackingApp(QMainWindow):
             self.predicted_label = QLabel(str(self.predicted))
             self.layout.addWidget(self.predicted_label, 1, 2)  # Add the label to position (1,2)
 
-            # Assuming you have a QWidget or similar to set the layout on
             self.setLayout(self.layout)
             
-            convert = Convert_file_to_parquet(self.res, None ,None)
+            convert = ConvertFileToParquet(self.res, None ,None)
             self.landmark_dataframe = convert.convert_to_dataframe()
             
             return self.landmark_dataframe

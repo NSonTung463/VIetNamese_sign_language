@@ -12,7 +12,6 @@ import torch
 from torch.cuda.amp import GradScaler, autocast
 from torch.utils.data import Dataset, DataLoader,TensorDataset
 from collections import defaultdict
-import transformers
 # from decouple import Config, RepositoryEnv
 import random
 
